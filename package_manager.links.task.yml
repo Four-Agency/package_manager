@@ -1,0 +1,22 @@
+entity.package.settings:
+  title: 'Settings'
+  route_name: entity.package.settings
+  base_route: entity.package.settings
+entity.package.view:
+  title: 'View'
+  route_name: entity.package.canonical
+  base_route: entity.package.canonical
+entity.package.edit_form:
+  title: 'Edit'
+  route_name: entity.package.edit_form
+  base_route: entity.package.canonical
+entity.package.delete_form:
+  title: 'Delete'
+  route_name: entity.package.delete_form
+  base_route: entity.package.canonical
+  weight: 10
+entity.package.collection:
+  title: 'Packages'
+  route_name: entity.package.collection
+  base_route: system.admin_content
+  weight: 10

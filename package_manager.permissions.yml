@@ -1,0 +1,11 @@
+administer package:
+  title: 'Administer packages'
+  restrict access: true
+view package:
+  title: 'View package'
+edit package:
+  title: 'Edit package'
+delete package:
+  title: 'Delete package'
+create package:
+  title: 'Create package'

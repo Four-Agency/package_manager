@@ -1,0 +1,6 @@
+services:
+  package_manager.controller:
+    class: Drupal\package_manager\Controller\PackageManagerController
+    arguments: ["@entity_type.manager"]
+    tags:
+      - { name: controller.service_arguments }

@@ -1,0 +1,7 @@
+name: "Package Manager"
+type: module
+description: "Manage custom packages"
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:file

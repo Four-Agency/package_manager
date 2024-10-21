@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * package_manager.install
+ */
+
+/**
+ * Implements hook_install().
+ */
+function package_manager_install() {
+  // Clear cached definitions.
+  \Drupal::service('entity_type.manager')->clearCachedDefinitions();
+
+  // Define the packages directory path.
+  $packages_dir = DRUPAL_ROOT . '/packages';
+
+  // Check if the packages directory exists, if not, create it.
+  if (!file_exists($packages_dir)) {
+    mkdir($packages_dir, 0755, TRUE);
+  }
+
+  // Define the .htaccess file path.
+  $htaccess_file = $packages_dir . '/.htaccess';
+
+  // Define the content for the .htaccess file.
+  $htaccess_content = <<<HTACCESS
+RewriteEngine On
+
+# If the request is for a file that exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# If the request is for a directory that exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Handle requests to subfolders under /packages
+RewriteRule ^packages/(.*)$ /packages/$1/index.html [QSA,L]
+
+# Fallback to index.html for other requests
+RewriteRule ^ index.html [QSA,L]
+HTACCESS;
+
+  // Write the .htaccess content to the file.
+  file_put_contents($htaccess_file, $htaccess_content);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function package_manager_uninstall() {
+  // Clear cached definitions.
+  \Drupal::service('entity_type.manager')->clearCachedDefinitions();
+
+  // Define the packages directory path.
+  $packages_dir = DRUPAL_ROOT . '/packages';
+
+  // Check if the packages directory exists, if so, remove it.
+  if (file_exists($packages_dir)) {
+    // Remove all files and subdirectories within the packages directory.
+    $files = new RecursiveIteratorIterator(
+      new RecursiveDirectoryIterator($packages_dir, RecursiveDirectoryIterator::SKIP_DOTS),
+      RecursiveIteratorIterator::CHILD_FIRST
+    );
+
+    foreach ($files as $fileinfo) {
+      $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+      $todo($fileinfo->getRealPath());
+    }
+
+    // Remove the packages directory itself.
+    rmdir($packages_dir);
+  }
+}

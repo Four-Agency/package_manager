@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Package Manager module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Render\Element;
+
+/**
+ * Implements hook_theme().
+ */
+function package_manager_theme(): array {
+  return [
+    'package' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Prepares variables for package templates.
+ *
+ * Default template: package.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the package information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_package(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function package_manager_entity_delete(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'package') {
+    // Delete the associated file.
+    $file = $entity->get('file')->entity;
+    if ($file) {
+      $file->delete();
+    }
+
+    $slug = $entity->get('slug')->value;
+    // Delete the package directory.
+    $directory = DRUPAL_ROOT . $slug;
+    if (file_exists($directory)) {
+      \Drupal::service('file_system')->deleteRecursive($directory);
+    }
+  }
+}

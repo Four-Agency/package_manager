@@ -1,0 +1,5 @@
+package.add_form:
+  title: 'Add package'
+  route_name: entity.package.add_form
+  appears_on:
+    - entity.package.collection

@@ -1,0 +1,16 @@
+package_manager.packages:
+  path: "/packages/{subpath}"
+  defaults:
+    _title: "Packages"
+    _controller: '\Drupal\package_manager\Controller\PackageManagerController::handleSubpath'
+  requirements:
+    _permission: "access content"
+    subpath: ".*"
+
+entity.package.settings:
+  path: "admin/structure/package"
+  defaults:
+    _form: '\Drupal\package_manager\Form\PackageSettingsForm'
+    _title: "Package"
+  requirements:
+    _permission: "administer package"

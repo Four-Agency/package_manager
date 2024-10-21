@@ -1,0 +1,11 @@
+entity.package.settings:
+  title: 'Package'
+  description: 'Configure a Package entity type.'
+  route_name:  entity.package.settings
+  parent: system.admin_structure
+
+entity.package.collection:
+  title: 'Packages'
+  description: 'List of packages.'
+  route_name: entity.package.collection
+  parent: system.admin_content
